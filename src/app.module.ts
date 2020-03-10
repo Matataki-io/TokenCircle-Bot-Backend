@@ -11,6 +11,9 @@ import { TokenModule } from './token/token.module';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
+import { AccessBearerTokens } from './entities/AccessBearerTokens';
+import { MttkTokenIdToConract } from './entities/MttkTokenIdToConract';
+import { MttkUidToWallet } from './entities/MttkUidToWallet';
 
 // Load process.env
 config()
@@ -25,8 +28,9 @@ config()
       database: process.env.DB_DATABASE,
       // 不同的环境请使用不同的 schema
       schema: process.env.DB_SCHEMA,
-      entities: ["dist/entities/*.entity{.ts,.js}"],
-      synchronize: true,
+      autoLoadEntities: true,
+      entities: [ AccessBearerTokens, MttkTokenIdToConract, MttkUidToWallet ],
+      synchronize: false,
     }),
     UserModule,
     TokenModule,
@@ -35,4 +39,4 @@ config()
   controllers: [AppController, TokenController, UserController],
   providers: [AppService, UserService, AuthService],
 })
-export class AppModule { }
+export class AppModule {}
