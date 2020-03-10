@@ -1,25 +1,25 @@
-import { Module } from '@nestjs/common';
+import { Module } from "@nestjs/common";
 import { config } from "dotenv";
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { TokenController } from './token/token.controller';
-import { UserController } from './user/user.controller';
-import { UserService } from './user/user.service';
-import { UserModule } from './user/user.module';
-import { TokenModule } from './token/token.module';
-import { AuthService } from './auth/auth.service';
-import { AuthModule } from './auth/auth.module';
-import { PassportModule } from '@nestjs/passport';
-import { AccessBearerTokens } from './entities/AccessBearerTokens';
-import { MttkTokenIdToConract } from './entities/MttkTokenIdToConract';
-import { MttkUidToWallet } from './entities/MttkUidToWallet';
+import { TokenController } from "./token/token.controller";
+import { UserController } from "./user/user.controller";
+import { UserService } from "./user/user.service";
+import { UserModule } from "./user/user.module";
+import { TokenModule } from "./token/token.module";
+import { AuthService } from "./auth/auth.service";
+import { AuthModule } from "./auth/auth.module";
+import { PassportModule } from "@nestjs/passport";
+import { AccessBearerTokens } from "./entities/AccessBearerTokens";
+import { Token } from "./entities/Token";
+import { User } from "./entities/User";
 
 // Load process.env
-config()
+config();
 @Module({
   imports: [
-    PassportModule.register({ defaultStrategy: 'BearerStrategy' }),
+    PassportModule.register({ defaultStrategy: "BearerStrategy" }),
     TypeOrmModule.forRoot({
       type: "postgres",
       host: process.env.DB_HOST,
@@ -29,14 +29,14 @@ config()
       // 不同的环境请使用不同的 schema
       schema: process.env.DB_SCHEMA,
       autoLoadEntities: true,
-      entities: [ AccessBearerTokens, MttkTokenIdToConract, MttkUidToWallet ],
-      synchronize: false,
+      entities: [AccessBearerTokens, Token, User],
+      synchronize: false
     }),
     UserModule,
     TokenModule,
-    AuthModule,
+    AuthModule
   ],
-  controllers: [AppController, TokenController, UserController],
-  providers: [AppService, UserService, AuthService],
+  controllers: [AppController],
+  providers: [AppService]
 })
 export class AppModule {}

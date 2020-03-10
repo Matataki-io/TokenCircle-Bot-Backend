@@ -1,12 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { AccessBearerTokens } from "src/entities/AccessBearerTokens";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class AuthService {
+    constructor(
+        @InjectRepository(AccessBearerTokens)
+        private readonly accessTokenRepo: Repository<AccessBearerTokens>
+    ) {
+
+    }
     async validateToken(token: string): Promise<boolean> {
-        console.info(token)
-        return [
-            "c11322fc-b413-4fd2-acd1-39af7d07f958",
-            "9e8b27b0-0cca-4df0-8c14-625f71d3bfec"
-        ].indexOf(token) >= 0;
+        // Checkout the DB to see the token is exist or not.
+        const result = await this.accessTokenRepo.find({ token });
+        return result.length !== 0 && result[0].token === token;
     }
 }

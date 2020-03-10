@@ -1,4 +1,3 @@
-import { PassportStrategy } from '@nestjs/passport';
+import { PassportStrategy } from "@nestjs/passport";
 
-export { JsonColumn } from './JsonColumn'
-
+export { JsonColumn } from "./JsonColumn";
