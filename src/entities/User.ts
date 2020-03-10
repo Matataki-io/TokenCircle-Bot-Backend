@@ -4,8 +4,11 @@ import { Entity, Column, PrimaryColumn } from "typeorm";
 export class User {
   // Matataki User Id
   @PrimaryColumn()
-  userId: number;
+  userId!: number;
 
   @Column()
-  walletAddress: string;
+  walletAddress!: string;
+
+  @Column({ type: "bigint", nullable: true })
+  telegramUid!: number | string;
 }

@@ -4,8 +4,8 @@ import { Entity, PrimaryColumn, Column } from "typeorm";
 export class Token {
   // Matataki Token Id
   @PrimaryColumn()
-  tokenId: number;
+  tokenId!: number;
 
   @Column()
-  contractAddress: string;
+  contractAddress!: string;
 }

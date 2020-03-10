@@ -7,7 +7,8 @@ import {
   Body,
   BadRequestException,
   NotFoundException,
-  Delete
+  Delete,
+  Patch
 } from "@nestjs/common";
 import { BearerGuard } from "../auth/bearer.guard";
 import { UserService } from "./user.service";
@@ -44,6 +45,22 @@ export class UserController {
       if (!walletAddress) throw new BadRequestException('"walletAddress" should be not empty');
       const result = await this._service.create(Number(id), walletAddress);
       return { result }
+  }
+
+  @UseGuards(BearerGuard)
+  @Patch('/:id')
+  async updateUser(
+      @Param('id') id: string,
+      @Body() partialData: object
+  ) {
+      if (isNaN(Number(id))) throw new BadRequestException('"id" should be a number');
+      if (!partialData) throw new BadRequestException('"partialData" should be a proper object');
+      try {
+        const result = await this._service.update(Number(id), partialData);
+        return { result }
+      } catch (error) {
+          throw new BadRequestException(error)
+      }
   }
   
   @UseGuards(BearerGuard)

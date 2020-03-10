@@ -26,10 +26,8 @@ export class UserService {
       return this.userRepo.save(user);
   }
 
-  async update(id: number, walletAddress: string) {
-      let user = await this.userRepo.findOne(id)
-      user.walletAddress = walletAddress;
-      return this.userRepo.save(user);
+  update(id: number, partialEntity: object) {
+      return this.userRepo.update(id, partialEntity);
   }
 
   delete(id: number) {
