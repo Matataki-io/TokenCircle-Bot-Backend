@@ -33,4 +33,8 @@ export class UserService {
   delete(id: number) {
       return this.userRepo.delete({ userId: id })
   }
+
+  getUserByTelegramUid(telegramUid: number|string) {
+      return this.userRepo.findOne({ telegramUid })
+  }
 }

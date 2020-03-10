@@ -7,6 +7,7 @@ import { UserModule } from "./user/user.module";
 import { TokenModule } from "./token/token.module";
 import { AuthModule } from "./auth/auth.module";
 import { PassportModule } from "@nestjs/passport";
+import { GetMappingModule } from './get-mapping/get-mapping.module';
 
 // Load process.env
 config();
@@ -25,7 +26,8 @@ config();
     }),
     UserModule,
     TokenModule,
-    AuthModule
+    AuthModule,
+    GetMappingModule
   ],
   controllers: [AppController],
   providers: [AppService]
