@@ -3,17 +3,10 @@ import { config } from "dotenv";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { TokenController } from "./token/token.controller";
-import { UserController } from "./user/user.controller";
-import { UserService } from "./user/user.service";
 import { UserModule } from "./user/user.module";
 import { TokenModule } from "./token/token.module";
-import { AuthService } from "./auth/auth.service";
 import { AuthModule } from "./auth/auth.module";
 import { PassportModule } from "@nestjs/passport";
-import { AccessBearerTokens } from "./entities/AccessBearerTokens";
-import { Token } from "./entities/Token";
-import { User } from "./entities/User";
 
 // Load process.env
 config();
@@ -29,8 +22,6 @@ config();
       // 不同的环境请使用不同的 schema
       schema: process.env.DB_SCHEMA,
       autoLoadEntities: true,
-      entities: [AccessBearerTokens, Token, User],
-      synchronize: false
     }),
     UserModule,
     TokenModule,
