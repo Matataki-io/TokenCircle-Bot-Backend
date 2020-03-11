@@ -5,7 +5,7 @@ import { User } from "./User";
 export class Token {
     // Matataki Token Id
     @PrimaryColumn()
-    tokenId!: number;
+    id!: number;
 
     @Column({ type: "text", nullable: true })
     name!: string | null;
