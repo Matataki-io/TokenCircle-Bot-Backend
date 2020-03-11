@@ -5,38 +5,38 @@ import { Repository } from "typeorm";
 
 @Injectable()
 export class TokenService {
-  constructor(
-      @InjectRepository(Token)
-      private readonly tokenRepo: Repository<Token>
-  ) {}
-  
-  async getTokens() {
-      const result = await this.tokenRepo.find()
-      return result
-  }
-  
-  get(id: number) {
-      return this.tokenRepo.findOne(id)
-  }
+    constructor(
+        @InjectRepository(Token)
+        private readonly tokenRepo: Repository<Token>
+    ) {}
 
-  getTokenBySymbol(symbol: string) {
-      return this.tokenRepo.findOne({ symbol }, { relations: ['issuer'] })
-  }
+    async getTokens() {
+        const result = await this.tokenRepo.find()
+        return result
+    }
 
-  async create(id: number, contractAddress: string) {
-      let token = new Token()
-      token.tokenId = id;
-      token.contractAddress = contractAddress;
-      return this.tokenRepo.save(token);
-  }
+    get(id: number) {
+        return this.tokenRepo.findOne(id)
+    }
 
-  async update(id: number, contractAddress: string) {
-      let token = await this.tokenRepo.findOne(id)
-      token.contractAddress = contractAddress;
-      return this.tokenRepo.save(token);
-  }
+    getTokenBySymbol(symbol: string) {
+        return this.tokenRepo.findOne({ symbol }, { relations: ['issuer'] })
+    }
 
-  delete(id: number) {
-      return this.tokenRepo.delete({ tokenId: id })
-  }
+    async create(id: number, contractAddress: string) {
+        let token = new Token()
+        token.tokenId = id;
+        token.contractAddress = contractAddress;
+        return this.tokenRepo.save(token);
+    }
+
+    async update(id: number, contractAddress: string) {
+        let token = await this.tokenRepo.findOne(id)
+        token.contractAddress = contractAddress;
+        return this.tokenRepo.save(token);
+    }
+
+    delete(id: number) {
+        return this.tokenRepo.delete({ tokenId: id })
+    }
 }

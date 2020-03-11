@@ -5,38 +5,38 @@ import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class UserService {
-  constructor(
-      @InjectRepository(User)
-      private readonly userRepo: Repository<User>,
-  ) {}
+    constructor(
+        @InjectRepository(User)
+        private readonly userRepo: Repository<User>,
+    ) {}
 
-  async getUsers() {
-      const result = await this.userRepo.find()
-      return result
-  }
+    async getUsers() {
+        const result = await this.userRepo.find()
+        return result
+    }
 
-  get(id: number) {
-      return this.userRepo.findOne(id, { relations: [ "issuedTokens" ]})
-  }
-  
-  async create(id: number, walletAddress: string) {
-      let user = new User()
-      user.userId = id;
-      user.walletAddress = walletAddress;
-      return this.userRepo.save(user);
-  }
+    get(id: number) {
+        return this.userRepo.findOne(id, { relations: [ "issuedTokens" ]})
+    }
 
-  update(id: number, partialEntity: object) {
-      return this.userRepo.update(id, partialEntity);
-  }
+    async create(id: number, walletAddress: string) {
+        let user = new User()
+        user.userId = id;
+        user.walletAddress = walletAddress;
+        return this.userRepo.save(user);
+    }
 
-  delete(id: number) {
-      return this.userRepo.delete({ userId: id })
-  }
+    update(id: number, partialEntity: object) {
+        return this.userRepo.update(id, partialEntity);
+    }
 
-  getUserByTelegramUid(telegramUid: number|string) {
-      return this.userRepo.findOne({ telegramUid })
-  }
+    delete(id: number) {
+        return this.userRepo.delete({ userId: id })
+    }
+
+    getUserByTelegramUid(telegramUid: number|string) {
+        return this.userRepo.findOne({ telegramUid })
+    }
 
 //   getTokenDetailByUser()
 }

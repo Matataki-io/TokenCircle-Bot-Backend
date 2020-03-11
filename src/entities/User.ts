@@ -4,20 +4,20 @@ import { Token } from "./Token";
 
 @Entity()
 export class User {
-  // Matataki User Id
-  @PrimaryColumn()
-  userId!: number;
+    // Matataki User Id
+    @PrimaryColumn()
+    userId!: number;
 
-  @Column({ nullable: true })
-  name!: string;
+    @Column({ nullable: true })
+    name!: string;
 
-  @Column()
-  walletAddress!: string;
+    @Column()
+    walletAddress!: string;
 
-  @Column({ type: "bigint", nullable: true })
-  telegramUid!: number | string;
+    @Column({ type: "bigint", nullable: true })
+    telegramUid!: number | string;
 
-  // 仅指用户发行的 Token
-  @OneToMany(type => Token, token => token.issuer)
-  issuedTokens!: Array<Token>;
+    // 仅指用户发行的 Token
+    @OneToMany(type => Token, token => token.issuer)
+    issuedTokens!: Array<Token>;
 }

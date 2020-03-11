@@ -2,17 +2,17 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { GetMappingController } from './get-mapping.controller';
 
 describe('GetMapping Controller', () => {
-  let controller: GetMappingController;
+    let controller: GetMappingController;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [GetMappingController],
-    }).compile();
+    beforeEach(async () => {
+        const module: TestingModule = await Test.createTestingModule({
+            controllers: [GetMappingController],
+        }).compile();
 
-    controller = module.get<GetMappingController>(GetMappingController);
-  });
+        controller = module.get<GetMappingController>(GetMappingController);
+    });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
+    it('should be defined', () => {
+        expect(controller).toBeDefined();
+    });
 });

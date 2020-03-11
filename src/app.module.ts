@@ -12,24 +12,24 @@ import { GetMappingModule } from './get-mapping/get-mapping.module';
 // Load process.env
 config();
 @Module({
-  imports: [
-    PassportModule.register({ defaultStrategy: "BearerStrategy" }),
-    TypeOrmModule.forRoot({
-      type: "postgres",
-      host: process.env.DB_HOST,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
-      // 不同的环境请使用不同的 schema
-      schema: process.env.DB_SCHEMA,
-      autoLoadEntities: true,
-    }),
-    UserModule,
-    TokenModule,
-    AuthModule,
-    GetMappingModule
-  ],
-  controllers: [AppController],
-  providers: [AppService]
+    imports: [
+        PassportModule.register({ defaultStrategy: "BearerStrategy" }),
+        TypeOrmModule.forRoot({
+            type: "postgres",
+            host: process.env.DB_HOST,
+            username: process.env.DB_USERNAME,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_DATABASE,
+            // 不同的环境请使用不同的 schema
+            schema: process.env.DB_SCHEMA,
+            autoLoadEntities: true,
+        }),
+        UserModule,
+        TokenModule,
+        AuthModule,
+        GetMappingModule
+    ],
+    controllers: [AppController],
+    providers: [AppService]
 })
 export class AppModule {}

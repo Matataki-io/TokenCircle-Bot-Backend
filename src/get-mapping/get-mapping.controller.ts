@@ -5,7 +5,7 @@ import { TokenService } from 'src/token/token.service';
 import { getTokenByUserIdResponse, getTokenBySymbolResponse,
     getTgUidToUserResponse } from "./response.types";
 import { ApiTags, ApiSecurity, ApiOperation, ApiOkResponse,
-     ApiParam, ApiUnauthorizedResponse } from '@nestjs/swagger';
+    ApiParam, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 @ApiTags('mapping')
 @ApiSecurity('bearer')

@@ -7,8 +7,8 @@ import { TokenService } from 'src/token/token.service';
 import { Token } from 'src/entities/Token';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Token])],
-  controllers: [GetMappingController],
-  providers: [UserService, TokenService]
+    imports: [TypeOrmModule.forFeature([User, Token])],
+    controllers: [GetMappingController],
+    providers: [UserService, TokenService]
 })
 export class GetMappingModule {}
