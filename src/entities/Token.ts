@@ -7,6 +7,9 @@ export class Token {
   @PrimaryColumn()
   tokenId!: number;
 
+  @Column({ nullable: true })
+  name!: string;
+
   @Column()
   contractAddress!: string;
 

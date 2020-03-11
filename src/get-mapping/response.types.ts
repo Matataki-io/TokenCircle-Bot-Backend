@@ -4,6 +4,8 @@ class Token {
     @ApiProperty()
     tokenId: number;
     @ApiProperty()
+    name: string;
+    @ApiProperty()
     contractAddress: string;
     @ApiProperty()
     symbol: string;
@@ -11,6 +13,8 @@ class Token {
 class User {
     @ApiProperty()
     "userId": number;
+    @ApiProperty()
+    name: string;
     @ApiProperty()
     "walletAddress": string;
     @ApiProperty()

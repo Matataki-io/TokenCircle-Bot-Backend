@@ -8,6 +8,9 @@ export class User {
   @PrimaryColumn()
   userId!: number;
 
+  @Column({ nullable: true })
+  name!: string;
+
   @Column()
   walletAddress!: string;
 
