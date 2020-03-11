@@ -11,19 +11,21 @@ import {
 } from "@nestjs/common";
 import { TokenService } from "./token.service";
 import { BearerGuard } from "src/auth/bearer.guard";
+import { ApiTags, ApiSecurity } from '@nestjs/swagger';
 
+@ApiTags('token')
+@ApiSecurity('bearer')
+@UseGuards(BearerGuard)
 @Controller("token")
 export class TokenController {
   constructor(private readonly _service: TokenService) {}
 
-  @UseGuards(BearerGuard)
   @Get()
   async getUsers() {
       const tokens = await this._service.getTokens();
       return { tokens }
   }
 
-  @UseGuards(BearerGuard)
   @Get('/:id')
   async getToken(@Param('id') id: string) {
       if (isNaN(Number(id))) throw new BadRequestException('"id" should be a number');
@@ -32,7 +34,6 @@ export class TokenController {
       return { user }
   }
 
-  @UseGuards(BearerGuard)
   @Put('/:id')
   async addToken(
       @Param('id') id: string,
@@ -44,7 +45,6 @@ export class TokenController {
       return { result }
   }
 
-  @UseGuards(BearerGuard)
   @Delete('/:id')
   async deleteTokenRecord(@Param('id') id: string) {
       if (isNaN(Number(id))) throw new BadRequestException('"id" should be a number');

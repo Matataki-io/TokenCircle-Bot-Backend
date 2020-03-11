@@ -2,7 +2,11 @@ import { Controller, Get, UseGuards, Param, BadRequestException, NotFoundExcepti
 import { UserService } from 'src/user/user.service';
 import { BearerGuard } from 'src/auth/bearer.guard';
 import { TokenService } from 'src/token/token.service';
+import { ApiTags, ApiSecurity, ApiOperation, ApiParam } from '@nestjs/swagger';
 
+@ApiTags('mapping')
+@ApiSecurity('bearer')
+@UseGuards(BearerGuard)
 @Controller('mapping')
 export class GetMappingController {
     constructor(
@@ -10,8 +14,9 @@ export class GetMappingController {
         private readonly tokenService: TokenService
     ) { }
 
+    @ApiOperation({ summary: 'Get User profile with user-binded Telegram ID`' })
+    @ApiParam({ name: "telegramUid", description: "Telegram User ID" })
     @Get('/telegramUidToUser/:telegramUid')
-    @UseGuards(BearerGuard)
     async getUserByTelegramId(@Param('telegramUid') telegramUid: string) {
         if (isNaN(Number(telegramUid))) throw new BadRequestException('"telegramUid" should be a number');
         const user = await this.userService.getUserByTelegramUid(telegramUid)
@@ -19,18 +24,18 @@ export class GetMappingController {
         return { user }
     }
 
-    // For Bot getMinetokenIdFromSymbol
+    @ApiOperation({ summary: 'should be used with `getMinetokenIdFromSymbol`' })
+    @ApiParam({ name: "symbol", description: "Matataki Token Symbol (For now)" })
     @Get('/symbolToToken/:symbol')
-    @UseGuards(BearerGuard)
     async getTokenBySymbol(@Param('symbol') symbol: string) {
         const token = await this.tokenService.getTokenBySymbol(symbol)
         if (!token) throw new NotFoundException(`No record for Token symbol: ${symbol}`)
         return { token }
     }
 
-    // getUserMinetoken
+    @ApiOperation({ summary: 'should be used with `getUserMinetoken`' })
+    @ApiParam({ name: "userId", description: "Matataki User ID" })
     @Get('/userToToken/:userId')
-    @UseGuards(BearerGuard)
     async getTokenByUserId(@Param('userId') userId: string) {
         if (isNaN(Number(userId))) throw new BadRequestException('"telegramUid" should be a number');
         const user = await this.userService.get(Number(userId));

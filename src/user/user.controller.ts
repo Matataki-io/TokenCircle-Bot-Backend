@@ -1,32 +1,29 @@
 import {
-  Controller,
-  Get,
-  UseGuards,
-  Put,
-  Param,
-  Body,
+  Controller,UseGuards,
+  Get,Put, Delete,Patch,
+  Param,Body,
   BadRequestException,
-  NotFoundException,
-  Delete,
-  Patch
+  NotFoundException
 } from "@nestjs/common";
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { BearerGuard } from "../auth/bearer.guard";
 import { UserService } from "./user.service";
 
+@ApiSecurity('bearer')
+@ApiTags('user')
+@UseGuards(BearerGuard)
 @Controller("user")
 export class UserController {
   constructor(
       private readonly _service: UserService
   ) {}
 
-  @UseGuards(BearerGuard)
   @Get('/')
   async getUsers() {
       const users = await this._service.getUsers();
       return { users }
   }
 
-  @UseGuards(BearerGuard)
   @Get('/:id')
   async getUser(@Param('id') id: string) {
       if (isNaN(Number(id))) throw new BadRequestException('"id" should be a number');
@@ -35,7 +32,6 @@ export class UserController {
       return { user }
   }
 
-  @UseGuards(BearerGuard)
   @Put('/:id')
   async addUser(
       @Param('id') id: string,
@@ -47,7 +43,6 @@ export class UserController {
       return { result }
   }
 
-  @UseGuards(BearerGuard)
   @Patch('/:id')
   async updateUser(
       @Param('id') id: string,
@@ -63,7 +58,6 @@ export class UserController {
       }
   }
   
-  @UseGuards(BearerGuard)
   @Delete('/:id')
   async deleteUserRecord(@Param('id') id: string) {
       if (isNaN(Number(id))) throw new BadRequestException('"id" should be a number');
