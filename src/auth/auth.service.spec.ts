@@ -25,7 +25,7 @@ describe("AuthService", () => {
                             return Promise.resolve(result);
                         },
                     },
-                }
+                },
             ],
         }).compile();
 
