@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryColumn, OneToMany, Index } from "typeorm";
 import { type } from "os";
 import { Token } from "./Token";
 
@@ -8,14 +8,15 @@ export class User {
     @PrimaryColumn()
     userId!: number;
 
-    @Column({ nullable: true })
-    name!: string;
+    @Column({ type: "text", nullable: true })
+    name!: string | null;
 
-    @Column()
+    @Column({ type: "text" })
     walletAddress!: string;
 
     @Column({ type: "bigint", nullable: true })
-    telegramUid!: number | string;
+    @Index("user_telegramUid_idx", { unique: true })
+    telegramUid!: number | string | null;
 
     // 仅指用户发行的 Token
     @OneToMany(type => Token, token => token.issuer)
