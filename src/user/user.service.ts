@@ -19,9 +19,10 @@ export class UserService {
         return this.userRepo.findOne(id, { relations: [ "issuedTokens" ]})
     }
 
-    async create(id: number, walletAddress: string) {
+    async create(id: number, username: string, walletAddress: string) {
         let user = new User()
         user.userId = id;
+        user.name = username;
         user.walletAddress = walletAddress;
         return this.userRepo.save(user);
     }
