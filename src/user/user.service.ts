@@ -16,7 +16,7 @@ export class UserService {
   }
 
   get(id: number) {
-      return this.userRepo.findOne(id)
+      return this.userRepo.findOne(id, { relations: [ "issuedTokens" ]})
   }
   
   async create(id: number, walletAddress: string) {
@@ -37,4 +37,6 @@ export class UserService {
   getUserByTelegramUid(telegramUid: number|string) {
       return this.userRepo.findOne({ telegramUid })
   }
+
+//   getTokenDetailByUser()
 }

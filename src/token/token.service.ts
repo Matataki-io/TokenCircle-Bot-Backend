@@ -19,6 +19,10 @@ export class TokenService {
       return this.tokenRepo.findOne(id)
   }
 
+  getTokenBySymbol(symbol: string) {
+      return this.tokenRepo.findOne({ symbol }, { relations: ['issuer'] })
+  }
+
   async create(id: number, contractAddress: string) {
       let token = new Token()
       token.tokenId = id;
