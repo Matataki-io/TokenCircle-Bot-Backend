@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryColumn } from "typeorm";
+import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm";
+import { type } from "os";
+import { Token } from "./Token";
 
 @Entity()
 export class User {
@@ -11,4 +13,8 @@ export class User {
 
   @Column({ type: "bigint", nullable: true })
   telegramUid!: number | string;
+
+  // 仅指用户发行的 Token
+  @OneToMany(type => Token, token => token.issuer)
+  issuedTokens!: Array<Token>;
 }
