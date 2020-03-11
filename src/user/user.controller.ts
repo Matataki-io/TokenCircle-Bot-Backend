@@ -5,7 +5,7 @@ import {
     BadRequestException,
     NotFoundException
 } from "@nestjs/common";
-import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
 import { BearerGuard } from "../auth/bearer.guard";
 import { UserService } from "./user.service";
 
@@ -33,13 +33,15 @@ export class UserController {
     }
 
     @Put('/:id')
-    async addUser(
-    @Param('id') id: string,
-        @Body('walletAddress') walletAddress: string
+    @ApiOperation({ summary: 'Add User profile to the database for bot' })
+    @ApiParam({ name: "id", description: "Matataki User ID" })
+    async addUser(@Param('id') id: string,
+        @Body('walletAddress') walletAddress: string,
+        @Body('username') username: string
     ) {
         if (isNaN(Number(id))) throw new BadRequestException('"id" should be a number');
         if (!walletAddress) throw new BadRequestException('"walletAddress" should be not empty');
-        const result = await this._service.create(Number(id), walletAddress);
+        const result = await this._service.create(Number(id), username, walletAddress);
         return { result }
     }
 
