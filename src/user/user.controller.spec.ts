@@ -26,4 +26,20 @@ describe("User Controller", () => {
     it("should be defined", () => {
         expect(controller).toBeDefined();
     });
+
+    it("should get all 3 users", async () => {
+        const result = await controller.getUsers();
+
+        expect(result.users).toHaveLength(3);
+    });
+
+    it("should get user 1 with his/her issued token", async () => {
+        const { user } = await controller.getUser("1");
+
+        expect(user).toBeDefined();
+        expect(user.name).toBe("User 1");
+        expect(user.issuedTokens).toHaveLength(1);
+        expect(user.issuedTokens[0].id).toBe(1);
+        expect(user.issuedTokens[0].name).toBe("Token 1");
+    });
 });
