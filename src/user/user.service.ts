@@ -19,11 +19,11 @@ export class UserService {
     }
 
     async create(id: number, username: string, walletAddress: string) {
-        let user = new User()
-        user.userId = id;
-        user.name = username;
-        user.walletAddress = walletAddress;
-        return this.userRepo.save(user);
+        await this.userRepo.save(this.userRepo.create({
+            id,
+            name,
+            walletAddress,
+        }));
     }
 
     update(id: number, partialEntity: object) {

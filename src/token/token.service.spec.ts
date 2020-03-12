@@ -3,6 +3,7 @@ import { getRepositoryToken } from "@nestjs/typeorm";
 import { getRepository } from "typeorm";
 import { TokenService } from "./token.service";
 import { Token } from "src/entities/Token";
+import { User } from "src/entities/User";
 
 describe("TokenService", () => {
     let service: TokenService;
@@ -14,6 +15,10 @@ describe("TokenService", () => {
                 {
                     provide: getRepositoryToken(Token),
                     useValue: getRepository(Token),
+                },
+                {
+                    provide: getRepositoryToken(User),
+                    useValue: getRepository(User),
                 },
             ],
         }).compile();
@@ -67,7 +72,9 @@ describe("TokenService", () => {
         expect(repo.findOne(1)).resolves.toBeUndefined();
     });
     it("Update contractAddress", async () => {
-        expect(service.update(1, "0xa")).resolves.toBeUndefined();
+        expect(service.update(1, {
+            contractAddress: "0xa"
+        })).resolves.toBeUndefined();
 
         const repo = getRepository(Token);
         const token = await repo.findOneOrFail(1);

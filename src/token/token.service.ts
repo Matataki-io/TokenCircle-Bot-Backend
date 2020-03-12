@@ -27,18 +27,17 @@ export class TokenService {
 
     async create(id: number, name: string, symbol: string,
         issuerUid: number, contractAddress: string) {
-        let token = new Token()
-        token.tokenId = id;
-        token.name = name;
-        token.symbol = symbol;
-        const issuer = await this.userRepo.findOne(issuerUid);
-        token.issuer = issuer;
-        token.contractAddress = contractAddress;
-        return this.tokenRepo.save(token);
+        await this.tokenRepo.save(this.tokenRepo.create({
+            id,
+            name,
+            symbol,
+            contractAddress,
+            issuer: await this.userRepo.findOne(issuerUid),
+        }));
     }
 
-    update(id: number, payload: object) {
-        return this.tokenRepo.update(id, payload);
+    async update(id: number, payload: object) {
+        await this.tokenRepo.update(id, payload);
     }
 
     async delete(id: number) {
