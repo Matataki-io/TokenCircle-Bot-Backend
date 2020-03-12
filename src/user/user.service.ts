@@ -10,31 +10,30 @@ export class UserService {
         private readonly userRepo: Repository<User>,
     ) {}
 
-    async getUsers() {
-        const result = await this.userRepo.find()
-        return result
+    getUsers() {
+        return this.userRepo.find();
     }
 
     get(id: number) {
-        return this.userRepo.findOne(id, { relations: [ "issuedTokens" ]})
+        return this.userRepo.findOne(id, { relations: [ "issuedTokens" ]});
     }
 
-    async create(id: number, walletAddress: string) {
-        let user = new User()
-        user.userId = id;
-        user.walletAddress = walletAddress;
-        return this.userRepo.save(user);
+    create(id: number, walletAddress: string) {
+        return this.userRepo.save(this.userRepo.create({
+            id,
+            walletAddress,
+        }));
     }
 
     update(id: number, partialEntity: object) {
         return this.userRepo.update(id, partialEntity);
     }
 
-    delete(id: number) {
-        return this.userRepo.delete({ userId: id })
+    async delete(id: number) {
+        await this.userRepo.delete({ id });
     }
 
-    getUserByTelegramUid(telegramUid: number|string) {
+    getUserByTelegramUid(telegramUid: number | string) {
         return this.userRepo.findOne({ telegramUid })
     }
 
