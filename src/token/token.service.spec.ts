@@ -56,15 +56,22 @@ describe("TokenService", () => {
         expect(service.getTokenBySymbol("NOTFOUND")).resolves.toBeUndefined();
     });
 
-    // it("Create a token", async () => {
-    //     expect(service.create(3, "0x3")).resolves.toBeUndefined();
+    it("Create a token", async () => {
+        await expect(service.create(3, "Token 3", "TRD", 3, "0x3")).resolves.toBeUndefined();
 
-    //     const repo = getRepository(Token);
-    //     const token = await repo.findOne(3);
-    //     expect(token).toBeDefined();
-    //     expect(token!.id).toBe(3);
-    //     expect(token!.contractAddress).toBe("0x3");
-    // });
+        const repo = getRepository(Token);
+
+        const token = await repo.findOne(3, { relations: ["issuer"] });
+
+        expect(token).toBeDefined();
+        expect(token!.id).toBe(3);
+        expect(token!.name).toBe("Token 3");
+        expect(token!.symbol).toBe("TRD");
+        expect(token!.contractAddress).toBe("0x3");
+        expect(token!.issuer).toBeDefined();
+        expect(token!.issuer.id).toBe(3);
+        expect(token!.issuer.name).toBe("User 3");
+    });
     it("Delete a token", async () => {
         expect(service.delete(1)).resolves.toBeUndefined();
 

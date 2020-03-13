@@ -25,8 +25,7 @@ export class TokenService {
         return this.tokenRepo.findOne({ symbol }, { relations: ["issuer"] });
     }
 
-    async create(id: number, name: string, symbol: string,
-        issuerUid: number, contractAddress: string) {
+    async create(id: number, name: string, symbol: string, issuerUid: number, contractAddress: string) {
         await this.tokenRepo.save(this.tokenRepo.create({
             id,
             name,
