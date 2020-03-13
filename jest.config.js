@@ -21,5 +21,10 @@ module.exports = {
     "../test/test.setup.ts",
   ],
   coverageDirectory: "../coverage",
+  coverageThreshold: {
+    global: {
+      statements: 95,
+    },
+  },
   testEnvironment: "node"
 };
