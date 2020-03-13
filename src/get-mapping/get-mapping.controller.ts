@@ -2,10 +2,9 @@ import { Controller, Get, UseGuards, Param, BadRequestException, NotFoundExcepti
 import { UserService } from "src/user/user.service";
 import { BearerGuard } from "src/auth/bearer.guard";
 import { TokenService } from "src/token/token.service";
-import { getTokenByUserIdResponse, getTokenBySymbolResponse,
-    getTgUidToUserResponse } from "./response.types";
 import { ApiTags, ApiSecurity, ApiOperation, ApiOkResponse,
     ApiParam, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { UserResponse, TokenResponse } from "./response.types";
 
 @ApiTags("mapping")
 @ApiSecurity("bearer")
@@ -20,7 +19,7 @@ export class GetMappingController {
 
     @ApiOperation({ summary: "Get User profile with user-binded Telegram ID`" })
     @ApiParam({ name: "telegramUid", description: "Telegram User ID" })
-    @ApiOkResponse({ description: "Return the user of provided telegram uid", type: getTgUidToUserResponse})
+    @ApiOkResponse({ description: "Return the user of provided telegram uid", type: UserResponse })
     @Get("/telegramUidToUser/:telegramUid")
     async getUserByTelegramId(@Param("telegramUid", ParseIntPipe) telegramUid: number) {
         const user = await this.userService.getUserByTelegramUid(telegramUid);
@@ -33,7 +32,7 @@ export class GetMappingController {
 
     @ApiOperation({ summary: "should be used with `getMinetokenIdFromSymbol`" })
     @ApiParam({ name: "symbol", description: "Matataki Token Symbol (For now)" })
-    @ApiOkResponse({ description: "Return the token of the symbol", type: getTokenBySymbolResponse})
+    @ApiOkResponse({ description: "Return the token of the symbol", type: TokenResponse })
     @Get("/symbolToToken/:symbol")
     async getTokenBySymbol(@Param("symbol") symbol: string) {
         const token = await this.tokenService.getTokenBySymbol(symbol);
@@ -46,7 +45,7 @@ export class GetMappingController {
 
     @ApiOperation({ summary: "should be used with `getUserMinetoken`" })
     @ApiParam({ name: "userId", description: "Matataki User ID"})
-    @ApiOkResponse({ description: "Return the token issued by user", type: getTokenByUserIdResponse})
+    @ApiOkResponse({ description: "Return the token issued by user", type: [TokenResponse] })
     @Get("/userToToken/:userId")
     async getTokenByUserId(@Param("userId", ParseIntPipe) userId: number) {
         const user = await this.userService.get(userId);

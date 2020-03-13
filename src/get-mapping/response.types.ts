@@ -1,8 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-class Token {
+export class TokenResponse {
     @ApiProperty()
-    tokenId!: number;
+    id!: number;
     @ApiProperty()
     name!: string;
     @ApiProperty()
@@ -10,27 +10,13 @@ class Token {
     @ApiProperty()
     symbol!: string;
 }
-class User {
+export class UserResponse {
     @ApiProperty()
-    userId!: number;
+    id!: number;
     @ApiProperty()
     name!: string;
     @ApiProperty()
     walletAddress!: string;
-    @ApiProperty()
+    @ApiPropertyOptional()
     telegramUid!: string;
-}
-export class getTokenByUserIdResponse {
-    @ApiProperty({ type: Token, default: [], isArray: true })
-    issuedTokens: Token[] = [];
-}
-
-export class getTokenBySymbolResponse {
-    @ApiProperty()
-    token!: Token;
-}
-
-export class getTgUidToUserResponse {
-    @ApiProperty()
-    user!: User;
 }
