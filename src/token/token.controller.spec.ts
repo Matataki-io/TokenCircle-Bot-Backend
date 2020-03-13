@@ -49,6 +49,10 @@ describe("Token Controller", () => {
         expect(data.issuer.name).toBe("User 1");
     });
 
+    test("Get nothing with invalid id", () => {
+        expect(controller.getToken(-1)).rejects.toThrowError("Token -1 is not found from the database");
+    });
+
     test("Create Token 3", async () => {
         const statusFunc = jest.fn();
 
