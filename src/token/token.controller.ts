@@ -3,72 +3,75 @@ import {
     UseGuards,
     Get,
     Param,
-    BadRequestException,
     NotFoundException,
     Put,
     Body,
     Delete,
-    Patch
+    Patch,
+    HttpCode,
+    ParseIntPipe,
+    Res,
 } from "@nestjs/common";
+import { Response } from "express";
 import { TokenService } from "./token.service";
 import { BearerGuard } from "src/auth/bearer.guard";
-import { ApiTags, ApiSecurity, ApiOperation, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiSecurity, ApiOperation, ApiParam } from "@nestjs/swagger";
+import { CreateTokenDto } from "./dto";
 
-@ApiTags('token')
-@ApiSecurity('bearer')
+@ApiTags("token")
+@ApiSecurity("bearer")
 @UseGuards(BearerGuard)
 @Controller("token")
 export class TokenController {
     constructor(private readonly _service: TokenService) {}
 
     @Get()
-    async getUsers() {
-        const tokens = await this._service.getTokens();
-        return { tokens }
+    async getAllTokens() {
+        return {
+            data: await this._service.getTokens(),
+        };
     }
 
-    @Get('/:id')
-    async getToken(@Param('id') id: string) {
-        if (isNaN(Number(id))) throw new BadRequestException('"id" should be a number');
-        const token = await this._service.get(Number(id));
+    @Get("/:id")
+    async getToken(@Param("id", ParseIntPipe) id: number) {
+        const token = await this._service.get(id);
         if (!token) throw new NotFoundException(`Token ${id} is not found from the database`);
-        return { token }
+
+        return {
+            data: token,
+        };
     }
 
-    @Put('/:id')
-    @ApiOperation({ summary: 'Add Token profile to backend' })
+    @Put("/:id")
+    @ApiOperation({ summary: "Add Token profile to backend" })
     @ApiParam({ name: "id", description: "Telegram Token ID" })
-    async addToken(@Param('id') id: string,
-        @Body('name') name: string,
-        @Body('symbol') symbol: string,
-        @Body('issuer') issuer: number,
-        @Body('contractAddress') contractAddress?: string,
-    ) {
-        if (isNaN(Number(id)))
-            throw new BadRequestException('"id" should be a number');
+    async addToken(@Param("id", ParseIntPipe) id: number, @Body() dto: CreateTokenDto, @Res() response: Response) {
+        const { name, symbol, issuer, contractAddress } = dto;
 
-        if (!contractAddress)
-            throw new BadRequestException('"contractAddress" should be not empty');
+        const record = await this._service.get(id)
 
-        const result = await this._service.create(Number(id), name, symbol, issuer, contractAddress);
-        return { result }
+        await this._service.create(id, name, symbol, issuer, contractAddress);
+
+        response.status(record ? 200 : 201);
     }
 
-    @Patch('/:id')
-    @ApiOperation({ summary: 'Edit Token profile to backend' })
+    @Patch("/:id")
+    @ApiOperation({ summary: "Edit Token profile to backend" })
     @ApiParam({ name: "id", description: "Telegram Token ID" })
-    async modifyToken(@Param('id') id: string, @Body() payload: object) {
-        if (isNaN(Number(id)))
-            throw new BadRequestException('"id" should be a number');
+    async modifyToken(@Param("id", ParseIntPipe) id: number, @Body() payload: any) {
+        const { name, symbol, issuer, contractAddress } = payload;
 
-        const result = await this._service.update(Number(id), payload);
-        return { result }
+        await this._service.update(id, {
+            name,
+            symbol,
+            issuer,
+            contractAddress,
+        });
     }
 
-    @Delete('/:id')
-    async deleteTokenRecord(@Param('id') id: string) {
-        if (isNaN(Number(id))) throw new BadRequestException('"id" should be a number');
-        await this._service.delete(Number(id))
-        return { message: "delete successful." }
+    @Delete("/:id")
+    @HttpCode(204)
+    async deleteTokenRecord(@Param("id", ParseIntPipe) id: number) {
+        await this._service.delete(id);
     }
 }
