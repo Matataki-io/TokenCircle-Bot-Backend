@@ -17,6 +17,14 @@ module.exports = {
   moduleNameMapper: {
     "^src/(.+)": "<rootDir>/$1",
   },
-  coverageDirectory: "coverage",
+  setupFilesAfterEnv: [
+    "../test/test.setup.ts",
+  ],
+  coverageDirectory: "../coverage",
+  coverageThreshold: {
+    global: {
+      statements: 95,
+    },
+  },
   testEnvironment: "node"
 };

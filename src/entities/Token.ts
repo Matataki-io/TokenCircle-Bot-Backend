@@ -1,19 +1,20 @@
-import { Entity, PrimaryColumn, Column, ManyToOne } from "typeorm";
+import { Entity, PrimaryColumn, Column, ManyToOne, Index } from "typeorm";
 import { User } from "./User";
 
 @Entity()
 export class Token {
     // Matataki Token Id
     @PrimaryColumn()
-    tokenId!: number;
+    id!: number;
 
-    @Column({ nullable: true })
-    name!: string;
+    @Column({ type: "text", nullable: true })
+    name!: string | null;
 
-    @Column()
+    @Column({ type: "text" })
     contractAddress!: string;
 
-    @Column({ nullable: true })
+    @Column({ type: "text" })
+    @Index("token_symbol_idx", { unique: true })
     symbol!: string;
 
     // 目前 Matataki 用户与发行的Token是一对一关系

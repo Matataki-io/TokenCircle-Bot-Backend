@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "migrations": "ts-node -r tsconfig-paths/register ./scripts/Migrations.ts",
+    "token:generate": "ts-node -r tsconfig-paths/register ./scripts/GenerateAccessToken.ts",
     "ts:check": "tsc --project tsconfig.check.json --noEmit"
   },
   "dependencies": {
@@ -31,6 +32,8 @@
     "@nestjs/platform-express": "^6.11.11",
     "@nestjs/swagger": "^4.3.2",
     "@nestjs/typeorm": "^6.3.4",
+    "class-transformer": "^0.2.3",
+    "class-validator": "^0.11.0",
     "dotenv": "^8.2.0",
     "passport": "^0.4.1",
     "passport-http-bearer": "^1.0.1",
@@ -59,6 +62,7 @@
     "eslint-plugin-import": "^2.20.1",
     "jest": "^25.1.0",
     "prettier": "^1.19.1",
+    "sqlite3": "^4.1.1",
     "supertest": "^4.0.2",
     "ts-jest": "^25.2.1",
     "ts-loader": "^6.2.1",

@@ -8,7 +8,7 @@ async function generateAccessToken() {
         return;
     }
     const token = randomBytes(48).toString('hex')
-    const sqlCommand = `insert into "${options.schema}".access_bearer_tokens(token) VALUES('${token}')`;
+    const sqlCommand = `insert into "${options.schema}".access_bearer_token(token) VALUES('${token}')`;
     const conn = await createConnection();
 
     const queryRunner = conn.createQueryRunner();

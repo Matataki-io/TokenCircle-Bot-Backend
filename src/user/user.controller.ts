@@ -2,15 +2,19 @@ import {
     Controller, UseGuards,
     Get, Put, Delete, Patch,
     Param, Body,
-    BadRequestException,
-    NotFoundException
+    NotFoundException,
+    HttpCode,
+    ParseIntPipe,
+    Res,
 } from "@nestjs/common";
-import { ApiSecurity, ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
+import { Response } from "express";
+import { ApiSecurity, ApiTags, ApiOperation, ApiParam } from "@nestjs/swagger";
 import { BearerGuard } from "../auth/bearer.guard";
 import { UserService } from "./user.service";
+import { CreateUserDto } from "./dto";
 
-@ApiSecurity('bearer')
-@ApiTags('user')
+@ApiSecurity("bearer")
+@ApiTags("user")
 @UseGuards(BearerGuard)
 @Controller("user")
 export class UserController {
@@ -18,52 +22,49 @@ export class UserController {
         private readonly _service: UserService
     ) {}
 
-    @Get('/')
+    @Get("/")
     async getUsers() {
-        const users = await this._service.getUsers();
-        return { users }
+        return {
+            data: await this._service.getUsers(),
+        };
     }
 
-    @Get('/:id')
-    async getUser(@Param('id') id: string) {
-        if (isNaN(Number(id))) throw new BadRequestException('"id" should be a number');
-        const user = await this._service.get(Number(id));
+    @Get("/:id")
+    async getUser(@Param("id", ParseIntPipe) id: number) {
+        const user = await this._service.get(id);
         if (!user) throw new NotFoundException(`User ${id} is not found from the database`);
-        return { user }
+
+        return {
+            data: user,
+        };
     }
 
-    @Put('/:id')
-    @ApiOperation({ summary: 'Add User profile to the database for bot' })
+    @Put("/:id")
+    @ApiOperation({ summary: "Add User profile to the database for bot" })
     @ApiParam({ name: "id", description: "Matataki User ID" })
-    async addUser(@Param('id') id: string,
-        @Body('walletAddress') walletAddress: string,
-        @Body('username') username: string
-    ) {
-        if (isNaN(Number(id))) throw new BadRequestException('"id" should be a number');
-        if (!walletAddress) throw new BadRequestException('"walletAddress" should be not empty');
-        const result = await this._service.create(Number(id), username, walletAddress);
-        return { result }
+    async addUser(@Param("id", ParseIntPipe) id: number, @Body() dto: CreateUserDto, @Res() response: Response) {
+        const { name, walletAddress } = dto;
+
+        const record = await this._service.get(id);
+
+        await this._service.create(id, name, walletAddress);
+
+        response.status(record ? 200 : 201);
     }
 
-    @Patch('/:id')
-    async updateUser(
-    @Param('id') id: string,
-        @Body() partialData: object
-    ) {
-        if (isNaN(Number(id))) throw new BadRequestException('"id" should be a number');
-        if (!partialData) throw new BadRequestException('"partialData" should be a proper object');
-        try {
-            const result = await this._service.update(Number(id), partialData);
-            return { result }
-        } catch (error) {
-            throw new BadRequestException(error)
-        }
+    @Patch("/:id")
+    async updateUser(@Param("id", ParseIntPipe) id: number, @Body() payload: any) {
+        const { name, walletAddress } = payload;
+
+        await this._service.update(id, {
+            name,
+            walletAddress,
+        });
     }
 
-    @Delete('/:id')
-    async deleteUserRecord(@Param('id') id: string) {
-        if (isNaN(Number(id))) throw new BadRequestException('"id" should be a number');
-        await this._service.delete(Number(id))
-        return { message: "delete successful." }
+    @Delete("/:id")
+    @HttpCode(204)
+    async deleteUserRecord(@Param("id", ParseIntPipe) id: number) {
+        await this._service.delete(id);
     }
 }

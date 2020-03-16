@@ -13,36 +13,33 @@ export class TokenService {
         private readonly userRepo: Repository<User>
     ) {}
 
-    async getTokens() {
-        const result = await this.tokenRepo.find()
-        return result
+    getTokens() {
+        return this.tokenRepo.find();
     }
 
     get(id: number) {
-        return this.tokenRepo.findOne(id)
+        return this.tokenRepo.findOne(id, { relations: ["issuer"] });
     }
 
     getTokenBySymbol(symbol: string) {
-        return this.tokenRepo.findOne({ symbol }, { relations: ['issuer'] })
+        return this.tokenRepo.findOne({ symbol }, { relations: ["issuer"] });
     }
 
-    async create(id: number, name: string, symbol: string,
-        issuerUid: number, contractAddress: string) {
-        let token = new Token()
-        token.tokenId = id;
-        token.name = name;
-        token.symbol = symbol;
-        const issuer = await this.userRepo.findOne(issuerUid);
-        token.issuer = issuer;
-        token.contractAddress = contractAddress;
-        return this.tokenRepo.save(token);
+    async create(id: number, name: string, symbol: string, issuerUid: number, contractAddress: string) {
+        await this.tokenRepo.save(this.tokenRepo.create({
+            id,
+            name,
+            symbol,
+            contractAddress,
+            issuer: await this.userRepo.findOne(issuerUid),
+        }));
     }
 
-    update(id: number, payload: object) {
-        return this.tokenRepo.update(id, payload);
+    async update(id: number, payload: object) {
+        await this.tokenRepo.update(id, payload);
     }
 
-    delete(id: number) {
-        return this.tokenRepo.delete({ tokenId: id })
+    async delete(id: number) {
+        await this.tokenRepo.delete(id);
     }
 }
