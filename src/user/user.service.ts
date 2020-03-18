@@ -10,12 +10,12 @@ export class UserService {
         private readonly userRepo: Repository<User>,
     ) {}
 
-    getUsers() {
-        return this.userRepo.find();
+    async getUsers() {
+        return (await this.userRepo.find()).map(this.process);
     }
 
-    get(id: number) {
-        return this.userRepo.findOne(id, { relations: [ "issuedTokens" ]});
+    async get(id: number) {
+        return this.process(await this.userRepo.findOne(id, { relations: [ "issuedTokens" ]}));
     }
 
     async create(id: number, name: string, walletAddress: string) {
@@ -34,8 +34,16 @@ export class UserService {
         await this.userRepo.delete({ id });
     }
 
-    getUserByTelegramUid(telegramUid: number | string) {
-        return this.userRepo.findOne({ telegramUid })
+    async getUserByTelegramUid(telegramUid: number | string) {
+        return this.process(await this.userRepo.findOne({ telegramUid }));
+    }
+
+    private process(user?: User) {
+        if (user && typeof user.telegramUid === "string") {
+            user.telegramUid = Number(user.telegramUid);
+        }
+
+        return user;
     }
 
 //   getTokenDetailByUser()
