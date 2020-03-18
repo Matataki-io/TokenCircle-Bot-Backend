@@ -13,16 +13,16 @@ export class TokenService {
         private readonly userRepo: Repository<User>
     ) {}
 
-    getTokens() {
-        return this.tokenRepo.find();
+    async getTokens() {
+        return (await this.tokenRepo.find()).map(this.process);
     }
 
-    get(id: number) {
-        return this.tokenRepo.findOne(id, { relations: ["issuer"] });
+    async get(id: number) {
+        return this.process(await this.tokenRepo.findOne(id, { relations: ["issuer"] }));
     }
 
-    getTokenBySymbol(symbol: string) {
-        return this.tokenRepo.findOne({ symbol }, { relations: ["issuer"] });
+    async getTokenBySymbol(symbol: string) {
+        return this.process(await this.tokenRepo.findOne({ symbol }, { relations: ["issuer"] }));
     }
 
     async create(id: number, name: string, symbol: string, issuerUid: number, contractAddress: string) {
@@ -41,5 +41,13 @@ export class TokenService {
 
     async delete(id: number) {
         await this.tokenRepo.delete(id);
+    }
+
+    private process(token?: Token) {
+        if (token && token.issuer && typeof token.issuer.telegramUid === "string") {
+            token.issuer.telegramUid = Number(token.issuer.telegramUid);
+        }
+
+        return token;
     }
 }
