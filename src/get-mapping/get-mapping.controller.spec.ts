@@ -42,6 +42,12 @@ describe('GetMapping Controller', () => {
             name: "User 1",
             telegramUid: 1,
             walletAddress: "0x1",
+            issuedTokens: [Object.assign(new Token(), {
+                id: 1,
+                name: "Token 1",
+                symbol: "FST",
+                contractAddress: "0x1",
+            })],
         }));
     });
     test("Get nothing by invalid telegram id", () => {

@@ -35,7 +35,7 @@ export class UserService {
     }
 
     async getUserByTelegramUid(telegramUid: number | string) {
-        return this.process(await this.userRepo.findOne({ telegramUid }));
+        return this.process(await this.userRepo.findOne({ telegramUid }, { relations: [ "issuedTokens" ]}));
     }
 
     private process(user?: User) {
