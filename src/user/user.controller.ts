@@ -8,7 +8,7 @@ import {
     Res,
 } from "@nestjs/common";
 import { Response } from "express";
-import { ApiSecurity, ApiTags, ApiOperation, ApiParam } from "@nestjs/swagger";
+import { ApiSecurity, ApiTags, ApiOperation, ApiParam, ApiBody } from "@nestjs/swagger";
 import { BearerGuard } from "../auth/bearer.guard";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto";
@@ -67,5 +67,18 @@ export class UserController {
     @HttpCode(204)
     async deleteUserRecord(@Param("id", ParseIntPipe) id: number) {
         await this._service.delete(id);
+    }
+
+    @Put("/:id/telegramUid/:telegramUid")
+    @HttpCode(204)
+    async addUserTelegramUid(@Param("id", ParseIntPipe) id: number, @Param("telegramUid") telegramUid: string
+    ) {
+        await this._service.update(id, { telegramUid });
+    }
+
+    @Delete("/:id/telegramUid")
+    @HttpCode(204)
+    async deleteUserTelegramUid(@Param("id", ParseIntPipe) id: number) {
+        await this._service.update(id, { telegramUid: null });
     }
 }
