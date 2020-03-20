@@ -54,11 +54,12 @@ export class UserController {
 
     @Patch("/:id")
     async updateUser(@Param("id", ParseIntPipe) id: number, @Body() payload: any) {
-        const { name, walletAddress } = payload;
+        const { name, walletAddress, telegramUid } = payload;
 
         await this._service.update(id, {
             name,
             walletAddress,
+            telegramUid
         });
     }
 
