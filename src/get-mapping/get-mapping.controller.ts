@@ -52,7 +52,7 @@ export class GetMappingController {
         if (!user) throw new NotFoundException(`No record for Token of the user: ${userId}`);
 
         return {
-            data: user.issuedTokens
+            data: user.issuedTokens,
         };
     }
 }

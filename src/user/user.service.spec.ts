@@ -44,6 +44,9 @@ describe("UserService", () => {
 
         expect(user).toBeDefined();
         expect(user!.name).toBe("User 1");
+        expect(user!.issuedTokens).toHaveLength(1);
+        expect(user!.issuedTokens[0].id).toBe(1);
+        expect(user!.issuedTokens[0].name).toBe("Token 1");
     });
     it("should get nothing with a telegram id but no matataki account binded", () => {
         expect(service.getUserByTelegramUid(3)).resolves.toBeUndefined();
