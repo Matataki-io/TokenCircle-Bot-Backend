@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Token } from "src/entities/Token";
 import { Repository } from "typeorm";
 import { User } from "src/entities/User";
+import { maskEmailAddress } from "src/util";
 
 @Injectable()
 export class TokenService {
@@ -44,8 +45,14 @@ export class TokenService {
     }
 
     private process(token?: Token) {
-        if (token && token.issuer && typeof token.issuer.telegramUid === "string") {
-            token.issuer.telegramUid = Number(token.issuer.telegramUid);
+        if (token && token.issuer) {
+            if (token.issuer.name && token.issuer.name.includes("@")) {
+                token.issuer.name = maskEmailAddress(token.issuer.name);
+            }
+
+            if (token.issuer && typeof token.issuer.telegramUid === "string") {
+                token.issuer.telegramUid = Number(token.issuer.telegramUid);
+            }
         }
 
         return token;
