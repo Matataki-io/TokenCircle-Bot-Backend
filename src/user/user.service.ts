@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { User } from "src/entities/User";
 import { InjectRepository } from "@nestjs/typeorm";
+import { maskEmailAddress } from "src/util";
 
 @Injectable()
 export class UserService {
@@ -39,8 +40,13 @@ export class UserService {
     }
 
     private process(user?: User) {
-        if (user && typeof user.telegramUid === "string") {
-            user.telegramUid = Number(user.telegramUid);
+        if (user) {
+            if (user.name && user.name.includes("@")) {
+                user.name = maskEmailAddress(user.name);
+            }
+            if (typeof user.telegramUid === "string") {
+                user.telegramUid = Number(user.telegramUid);
+            }
         }
 
         return user;
