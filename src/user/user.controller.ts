@@ -6,12 +6,13 @@ import {
     HttpCode,
     ParseIntPipe,
     Res,
+    HttpStatus,
 } from "@nestjs/common";
 import { Response } from "express";
 import { ApiSecurity, ApiTags, ApiOperation, ApiParam, ApiBody } from "@nestjs/swagger";
 import { BearerGuard } from "../auth/bearer.guard";
 import { UserService } from "./user.service";
-import { CreateUserDto } from "./dto";
+import { CreateUserDto, UserUpdateTelegramDto } from "./dto";
 
 @ApiSecurity("bearer")
 @ApiTags("user")
@@ -69,15 +70,19 @@ export class UserController {
         await this._service.delete(id);
     }
 
-    @Put("/:id/telegramUid/:telegramUid")
-    @HttpCode(204)
-    async addUserTelegramUid(@Param("id", ParseIntPipe) id: number, @Param("telegramUid") telegramUid: string
+    @Put("/:id/telegramUid")
+    @ApiOperation({ summary: "User bind telegram account to the database" })
+    @ApiParam({ name: "id", description: "Matataki User ID" })
+    @ApiBody({ type: UserUpdateTelegramDto })
+    async addUserTelegramUid(@Param("id", ParseIntPipe) id: number,
+        @Body("telegramUid") telegramUid: string
     ) {
         await this._service.update(id, { telegramUid });
     }
 
     @Delete("/:id/telegramUid")
-    @HttpCode(204)
+    @ApiOperation({ summary: "User unbind telegram UID from the database" })
+    @ApiParam({ name: "id", description: "Matataki User ID" })
     async deleteUserTelegramUid(@Param("id", ParseIntPipe) id: number) {
         await this._service.update(id, { telegramUid: null });
     }

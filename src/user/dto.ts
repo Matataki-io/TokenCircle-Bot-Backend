@@ -10,3 +10,9 @@ export class CreateUserDto {
     @ApiProperty()
     walletAddress!: string;
 }
+
+export class UserUpdateTelegramDto {
+    @IsNotEmpty()
+    @ApiProperty()
+    telegramUid!: string;
+}
