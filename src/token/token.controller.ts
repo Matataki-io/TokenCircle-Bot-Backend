@@ -15,8 +15,8 @@ import {
 import { Response } from "express";
 import { TokenService } from "./token.service";
 import { BearerGuard } from "src/auth/bearer.guard";
-import { ApiTags, ApiSecurity, ApiOperation, ApiParam } from "@nestjs/swagger";
-import { CreateTokenDto } from "./dto";
+import { ApiTags, ApiSecurity, ApiOperation, ApiParam, ApiBody } from "@nestjs/swagger";
+import { CreateTokenDto, UpdateTokenContractDto } from "./dto";
 
 @ApiTags("token")
 @ApiSecurity("bearer")
@@ -73,5 +73,15 @@ export class TokenController {
     @HttpCode(204)
     async deleteTokenRecord(@Param("id", ParseIntPipe) id: number) {
         await this._service.delete(id);
+    }
+
+    @Put("/:id/contractAddress")
+    @ApiOperation({ summary: "Update Token contract when publishing" })
+    @ApiBody({ type: UpdateTokenContractDto })
+    @ApiParam({ name: "id", description: "Telegram Token ID" })
+    async setContractAddress(@Param("id", ParseIntPipe) id: number, @Body("contractAddress") contractAddress: string) {
+        await this._service.update(id, {
+            contractAddress,
+        });
     }
 }

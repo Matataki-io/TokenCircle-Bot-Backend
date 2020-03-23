@@ -18,3 +18,9 @@ export class CreateTokenDto {
     @ApiProperty()
     contractAddress!: string;
 }
+
+export class UpdateTokenContractDto {
+    @IsNotEmpty()
+    @ApiProperty()
+    contractAddress!: string;
+}
