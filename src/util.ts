@@ -4,31 +4,31 @@ export function maskEmailAddress(str: string) {
     const match = regex.exec(str);
 
     if (!match) {
-      return str;
+        return str;
     }
 
     let username = match[1];
     const rest = str.slice(username.length);
 
     switch (username.length) {
-      case 1:
-        username = '*';
-        break;
+        case 1:
+            username = '*';
+            break;
 
-      case 2:
-        username = username[0] + '*';
-        break;
+        case 2:
+            username = username[0] + '*';
+            break;
 
-      case 3:
-        username = username[0] + '*' + username[2];
-        break;
+        case 3:
+            username = username[0] + '*' + username[2];
+            break;
 
-      default:
-        const trunkSize = username.length / 4;
-        const firstSize = Math.max(Math.floor(trunkSize), 1);
-        const secondSize = Math.ceil(trunkSize * 2);
-        username = username.slice(0, firstSize) + '*'.repeat(secondSize) + username.slice(firstSize + secondSize);
-        break;
+        default:
+            const trunkSize = username.length / 4;
+            const firstSize = Math.max(Math.floor(trunkSize), 1);
+            const secondSize = Math.ceil(trunkSize * 2);
+            username = username.slice(0, firstSize) + '*'.repeat(secondSize) + username.slice(firstSize + secondSize);
+            break;
     }
 
     return username + rest;
