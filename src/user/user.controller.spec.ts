@@ -58,12 +58,12 @@ describe("User Controller", () => {
         expect(statusFunc).toBeCalledWith(201);
 
         const repo = getRepository(User);
-        const token = await repo.findOne(4);
+        const user = await repo.findOne(4);
 
-        expect(token).toBeDefined();
-        expect(token!.id).toBe(4);
-        expect(token!.name).toBe("User 4");
-        expect(token!.walletAddress).toBe("0x4");
+        expect(user).toBeDefined();
+        expect(user!.id).toBe(4);
+        expect(user!.name).toBe("User 4");
+        expect(user!.walletAddress).toBe("0x4");
     });
     test("Replace User 3", async () => {
         const statusFunc = jest.fn();
@@ -76,12 +76,12 @@ describe("User Controller", () => {
         expect(statusFunc).toBeCalledWith(200);
 
         const repo = getRepository(User);
-        const token = await repo.findOne(3);
+        const user = await repo.findOne(3);
 
-        expect(token).toBeDefined();
-        expect(token!.id).toBe(3);
-        expect(token!.name).toBe("User 3");
-        expect(token!.walletAddress).toBe("0xc");
+        expect(user).toBeDefined();
+        expect(user!.id).toBe(3);
+        expect(user!.name).toBe("User 3");
+        expect(user!.walletAddress).toBe("0xc");
     });
 
     test("Delete user 3", async () => {
@@ -90,5 +90,22 @@ describe("User Controller", () => {
         const repo = getRepository(User);
 
         expect(repo.findOne(3)).resolves.toBeUndefined();
+    });
+
+    test("Set telegram id of user 1", async () => {
+        await controller.addUserTelegramUid(1, "11");
+
+        const repo = getRepository(User);
+        const user = await repo.findOneOrFail(1);
+
+        expect(user.telegramUid).toBe(11);
+    });
+    test("Remove telegram id of user 1", async () => {
+        await controller.deleteUserTelegramUid(1);
+
+        const repo = getRepository(User);
+        const user = await repo.findOneOrFail(1);
+
+        expect(user.telegramUid).toBeNull();
     });
 });
