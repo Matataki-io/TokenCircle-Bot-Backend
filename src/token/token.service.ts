@@ -45,7 +45,7 @@ export class TokenService {
     }
 
     private process(token?: Token) {
-        if (token && token.issuer) {
+        if (token?.issuer) {
             if (token.issuer.name && token.issuer.name.includes("@")) {
                 token.issuer.name = maskEmailAddress(token.issuer.name);
             }
