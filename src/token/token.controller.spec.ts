@@ -110,4 +110,13 @@ describe("Token Controller", () => {
 
         expect(token).toBeUndefined();
     });
+
+    test("Replace contract address of token 1", async () => {
+        await controller.setContractAddress(1, "0xABC");
+
+        const repo = getRepository(Token);
+        const token = await repo.findOneOrFail(1, { relations: ["issuer"] });
+
+        expect(token.contractAddress).toBe("0xABC");
+    });
 });
