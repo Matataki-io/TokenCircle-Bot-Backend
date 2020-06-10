@@ -19,8 +19,8 @@ export class UserService {
         return this.process(await this.userRepo.findOne(id, { relations: [ "issuedTokens" ]}));
     }
 
-    async create(id: number, name: string, walletAddress: string) {
-        await this.userRepo.save(this.userRepo.create({
+    create(id: number, name: string, walletAddress: string) {
+        return this.userRepo.save(this.userRepo.create({
             id,
             name,
             walletAddress,
