@@ -52,7 +52,7 @@ export class TokenController {
 
         await this._service.create(id, name, symbol, issuer, contractAddress);
 
-        response.status(record ? 200 : 201);
+        response.status(record ? 200 : 201).send();
     }
 
     @Patch("/:id")
