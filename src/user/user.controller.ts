@@ -6,7 +6,7 @@ import {
     HttpCode,
     ParseIntPipe,
     Res,
-    HttpStatus,
+    // HttpStatus,
 } from "@nestjs/common";
 import { Response } from "express";
 import { ApiSecurity, ApiTags, ApiOperation, ApiParam, ApiBody } from "@nestjs/swagger";
@@ -50,7 +50,7 @@ export class UserController {
 
         await this._service.create(id, name, walletAddress);
 
-        response.status(record ? 200 : 201);
+        response.status(record ? 200 : 201).send();
     }
 
     @Patch("/:id")
