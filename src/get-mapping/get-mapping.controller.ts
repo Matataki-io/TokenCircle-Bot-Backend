@@ -5,6 +5,7 @@ import { TokenService } from "src/token/token.service";
 import { ApiTags, ApiSecurity, ApiOperation, ApiOkResponse,
     ApiParam, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { UserResponse, TokenResponse } from "./response.types";
+import { TelegramUsernameService } from "./telegram-username.service";
 
 @ApiTags("mapping")
 @ApiSecurity("bearer")
@@ -14,7 +15,8 @@ import { UserResponse, TokenResponse } from "./response.types";
 export class GetMappingController {
     constructor(
         private readonly userService: UserService,
-        private readonly tokenService: TokenService
+        private readonly tokenService: TokenService,
+        private readonly telegramUsernameService: TelegramUsernameService,
     ) { }
 
     @ApiOperation({ summary: "Get User profile with user-binded Telegram ID`" })
@@ -53,6 +55,15 @@ export class GetMappingController {
 
         return {
             data: user.issuedTokens,
+        };
+    }
+
+    @Get("/userToTelegramUsername/:userId")
+    async getTelegramUsernameByUserId(@Param("userId", ParseIntPipe) userId: number) {
+        const result = await this.telegramUsernameService.getUsername(userId);
+
+        return {
+            data: result,
         };
     }
 }

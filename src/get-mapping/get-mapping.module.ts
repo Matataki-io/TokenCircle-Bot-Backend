@@ -5,10 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/entities/User';
 import { TokenService } from 'src/token/token.service';
 import { Token } from 'src/entities/Token';
+import { TelegramUsernameService } from './telegram-username.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature([User, Token])],
     controllers: [GetMappingController],
-    providers: [UserService, TokenService]
+    providers: [UserService, TokenService, TelegramUsernameService]
 })
 export class GetMappingModule {}
