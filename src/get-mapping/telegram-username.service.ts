@@ -8,12 +8,14 @@ export class TelegramUsernameService {
         @InjectConnection() private readonly connection: Connection
     ) {}
 
-    async getUsername(id: number): Promise<string> {
+    async getUsername(id: number): Promise<string | null> {
         if (this.connection.options.type !== "postgres")
             throw new Error("Not postgres");
 
-        const [row] = await this.connection.query(`SELECT username FROM ${this.connection.options.schema}.telegram_username WHERE id = $1;`, [id]);
+        const result = await this.connection.query(`SELECT username FROM ${this.connection.options.schema}.telegram_username WHERE id = $1;`, [id]);
+        if (result.length === 0)
+            return null;
 
-        return row.username;
+        return result[0].username;
     }
 }
